@@ -1,6 +1,11 @@
-function! Crear()
-  echo "Hola, probando"
+function! Ma(line)
+      call fzf#run(fzf#wrap({'source': 'find -type d | cut -c 3-',
+      \ 'options': '--layout=reverse-list', 'sink': function('Crear', [a:line])}))
 endfun
 
-command! -bang -nargs=? -complete=dir Crear
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse-list --bind enter:execute(echo "Hola"))']}, <bang>0)
+function! Crear(nombre, ruta)
+  execute '!mkdir ' . expand(a:ruta) . '/' . expand(a:nombre)
+endfun
+
+command! -bang -nargs=1 -complete=file Crear
+      \ call Ma(<q-args>)
